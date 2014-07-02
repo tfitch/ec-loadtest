@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.2.2">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>https://github.com/tfitch/gatling-test-ec.git</url>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <browser class="hudson.plugins.git.browser.GithubWeb">
+      <url>https://github.com/tfitch/gatling-test-ec</url>
+    </browser>
+    <submoduleCfg class="list"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>GatlingChef.rb update src/test/scala/ec/ecMetal_Run.stale -u=tfitch -k /ec-loadtest/.chef/tfitch.pem &gt; src/test/scala/ec/ecMetal_Run.scala
+mvn -e gatling:execute -Dgatling.simulationClass=ec.ecMetal_Run</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <com.excilys.ebi.gatling.jenkins.GatlingPublisher plugin="gatling@1.0.3">
+      <enabled>true</enabled>
+      <project class="project" reference="../../.."/>
+    </com.excilys.ebi.gatling.jenkins.GatlingPublisher>
+  </publishers>
+  <buildWrappers/>
+</project>
